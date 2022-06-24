@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Title</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/uikit.min.css" />
+        <script src="js/uikit.min.js"></script>
+        <script src="js/uikit-icons.min.js"></script>
+    </head>
+    <body>
+        <div class="uk-background-default uk-padding uk-panel">
+            <div class="uk-grid uk-width-3-4">
+                <div class="uk-width-1-4">
+                    bla´bla bla
+                </div>
+                <div class="uk-width-3-4">
+                    <article class="uk-article">
+                        <h1 class="uk-article-title">Facilitador de teste de caos</h1>
+                        <p class="uk-article-meta">docker.builder</p>
+                        <p>Este projeto ajuda a criar um passo a passo para ajudar na criação de um teste de caos, e em seguida,
+                            entrega um código funcional.</p>
+                        <p>Para isto, você pode instalar containers diretamente do dockerhub, transformar uma pasta contida na
+                            máquina hospedeira ou baixar um projeto direto de um servidor git.</p>
+                        <p>Ao final da configuração, você poderá verificar a ordem de instalação, antes de gerar o código.</p>
+                        <p></p>
+                        <p>Qual a origem do container a ser criado?</p>
+                        <p></p>
+
+                        <div class="uk-child-width-1-3@s" uk-grid>
+                            <div>
+                                <div class="uk-height-medium uk-card uk-card-default uk-card-body uk-dark uk-background-muted uk-padding">
+                                    <h3>Cenários de caos</h3>
+                                    <p>Cenários são limites na quantidade de containers afetados simultaneamente durante o caos.</p>
+                                    <br>
+                                    <button id="scene" class="uk-button uk-button-default" uk-toggle="target: #modal-dockerhub">Adicionar</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="uk-height-medium uk-card uk-card-default uk-card-body uk-dark uk-background-muted uk-padding">
+                                    <h3>Rede</h3>
+                                    <p>Cria uma rede isola a rede usada no teste da rede do compotador hospedeiro.</p>
+                                    <br>
+                                    <button id="network" class="uk-button uk-button-default" uk-toggle="target: #modal-dockerhub">Adicionar</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="uk-height-medium uk-card uk-card-default uk-card-body uk-dark uk-background-muted uk-padding">
+                                    <h3>Dockerhub</h3>
+                                    <p>Permite instalar containers contidos no dockerhub, como por exemplo, o nats.</p>
+                                    <br>
+                                    <button id="dockerhub" class="uk-button uk-button-default" uk-toggle="target: #modal-dockerhub">Adicionar</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="uk-height-medium uk-card uk-card-default uk-card-body uk-dark uk-background-muted uk-padding">
+                                    <h3>Pasta Local</h3>
+                                    <p>Permite transformar um projeto golang contido no computador hospedeiro em container.</p>
+                                    <br>
+                                    <button id="local" class="uk-button uk-button-default" uk-toggle="target: #modal-local">Adicionar</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="uk-height-medium uk-card uk-card-default uk-card-body uk-background-muted">
+                                    <h3>Servidor Git</h3>
+                                    <p>Permite usar um repositório contido em um servidor git para transformar em container.</p>
+                                    <br>
+                                    <button id="git" class="uk-button uk-button-default" uk-toggle="target: #modal-git">Adicionar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="list" uk-sortable>
+                            <div></div>
+                            <div></div>
+                        </div>
+
+                    </article>
+
+                    <!-- This is the modal dockerhub -->
+                    <!-- docker pull nats -->
+                    <div id="modal-dockerhub" uk-modal>
+                        <div class="uk-modal-dialog">
+                            <button class="uk-modal-close-default" type="button" uk-close></button>
+
+                            <div class="uk-modal-header">
+                                <h2 class="uk-modal-title">Dockerhub</h2>
+                            </div>
+
+                            <div class="uk-modal-body" uk-overflow-auto>
+                                <form>
+                                    <div>
+                                        <div><b>Qual o nome e versão da imagem?</b></div>
+                                        <br>
+                                        <input class="uk-input" name="imageName" type="text" placeholder="nats:latest">
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div>
+                                        <div><b>Nome do container?</b></div>
+                                        <br>
+                                        <div>O docker exige um nome único para cada container e caso você necessite usar mais de um
+                                            container, o sistema adicionará um sufixo numérico ao final do nome de forma automática.</div>
+                                        <br>
+                                        <div>Caso queira que o container seja apagado, de forma automática, ao final de cada teste,
+                                            adicione o prefixo <b>'delete_'</b> ao nome do container.</div>
+                                        <br>
+
+                                        <div><b>Nota: </b>O sistema roda um coletor de lixo no início e no final de cada teste, para
+                                            remover de forma automática qualquer elemnto docker com o termo <b>delete</b> contido no
+                                            nome.</div>
+                                        <br>
+                                        <input class="uk-input" name="containerName" type="text" placeholder="delete_nats">
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div>
+                                        <div><b>Quantidade de containers?</b></div>
+                                        <br>
+                                        <div>Digite a quantidade de containers a serem criados de forma repetida.</div>
+                                        <br>
+                                        <input class="uk-input" name="containerName" type="number" placeholder="1" value="1">
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div>
+                                        <div><b>Expor portas do container?</b></div>
+                                        <br>
+                                        <div>Para acessar um container, você pode expor portas ao mundo. Por exemplo, no caso do
+                                            <b>nats</b> você pode expor a porta <b>4222</b>.</div>
+                                        <br>
+                                        <div>Como só pode haver uma porta em uso na rede, o sistema pede para que seja informado o id
+                                            do container. Por exemplo, o primeiro container recebe <b>id=0</b> e o próximo container
+                                            recebe <b>id=N+1</b>.</div>
+                                        <br>
+                                        <div>Separe as portas por ponto e vírgula e use a seguinte sintaxe: 'id:porta compuatdor
+                                            :porta container', por exemplo: '0:4222:4222;0:6222:6222'.</div>
+                                        <br>
+                                        <input class="uk-input" name="ports" type="text" placeholder="0:4222:4222">
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div>
+                                        <div><b>Compartilhar pastas ou arquivos entre container e compuatdor hospedeiro?</b></div>
+                                        <br>
+                                        <div>O docker permite compartilhar pastas entre o container e o computador hospedeiro de modo
+                                            que uma configuração ou arquivo salvo sejam facilmente acessados.</div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div>
+                                        <div><b>Monitorar a saída padrão do container?</b></div>
+                                        <br>
+                                        <div>A saída padrão do container pode ser monitorada na busca por palavras como <b>error</b> ou
+                                            <b>panic</b> para indicar errors no código, e quando isto acontecer, a saída padrão será
+                                            gravada na forma de um arquivo texto no computador hospedeiro.</div>
+                                        <br>
+                                        <div>Escreva os termos separados por ponto e virgula.</div>
+                                        <br>
+                                        <input class="uk-input" name="stdOutput" type="text" placeholder="error;warning;bug;panic">
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div>
+                                        <div><b>Gerar um arquivo CSV com dados estatísticos do container?</b></div>
+                                        <br>
+                                        <div>Quando um container é monitorado, uma função <b>containerInspect()</b> tira uma 'foto' do
+                                            estado atual do container e salva em arquivo para análise posterior.</div>
+                                        <br>
+                                        <div>Digite o nome do arquivo.</div>
+                                        <input class="uk-input" name="csvFile" type="text" placeholder="stats.csv">
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                </form>
+
+                                <p class="uk-text-right">
+                                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                    <button class="uk-button uk-button-primary" type="button">Save</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- This is the modal local -->
+                    <div id="modal-local" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body">
+                            <h2 class="uk-modal-title">Headline</h2>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            <p class="uk-text-right">
+                                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                <button class="uk-button uk-button-primary" type="button">Save</button>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- This is the modal git -->
+                    <div id="modal-git" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body">
+                            <h2 class="uk-modal-title">Headline</h2>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            <p class="uk-text-right">
+                                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                <button class="uk-button uk-button-primary" type="button">Save</button>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        (function () {
+
+        }());
+
+        function addDockerhub() {
+
+        }
+
+        function addLocal() {
+
+        }
+
+        function addGit() {
+
+        }
+    </script>
+</html>
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
