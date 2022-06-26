@@ -94,6 +94,15 @@
                             <div class="uk-modal-body" uk-overflow-auto>
                                 <form>
                                     <div>
+                                        <div><b>Qual o nome dessa etapa?</b></div>
+                                        <br>
+                                        <div>Apenas dê um nome para mantermos a coisa organizada.</div>
+                                        <br>
+                                        <input class="uk-input" name="imageName" type="text" placeholder="nats">
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div>
                                         <div><b>Qual o nome e versão da imagem?</b></div>
                                         <br>
                                         <input class="uk-input" name="imageName" type="text" placeholder="nats:latest">
@@ -135,20 +144,33 @@
                                         <br>
                                         <div>Como só pode haver uma porta em uso na rede, o sistema pede para que seja informado o id
                                             do container. Por exemplo, o primeiro container recebe <b>id=0</b> e o próximo container
-                                            recebe <b>id=N+1</b>.</div>
+                                            recebe <b>id=N-1</b>.</div>
                                         <br>
-                                        <div>Separe as portas por ponto e vírgula e use a seguinte sintaxe: 'id:porta compuatdor
-                                            :porta container', por exemplo: '0:4222:4222;0:6222:6222'.</div>
+                                        <div>Separe as portas por ponto e vírgula e use a seguinte sintaxe: 'id:porta compuatdor:porta
+                                            container', por exemplo: '0:4222:4222;0:6222:6222'.</div>
                                         <br>
                                         <input class="uk-input" name="ports" type="text" placeholder="0:4222:4222">
                                     </div>
                                     <br>
                                     <br>
                                     <div>
-                                        <div><b>Compartilhar pastas ou arquivos entre container e compuatdor hospedeiro?</b></div>
+                                        <div><b>Compartilhar pastas ou arquivos entre container e comparator hospedeiro?</b></div>
                                         <br>
-                                        <div>O docker permite compartilhar pastas entre o container e o computador hospedeiro de modo
-                                            que uma configuração ou arquivo salvo sejam facilmente acessados.</div>
+                                        <div>O docker permite compartilhar pastas entre o container e o computador hospedeiro
+                                            facilitando configurações ou acesso a arquivos salvos.</div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div>
+                                        <div><b>Monitorar a saída padrão do container a procura de falhas?</b></div>
+                                        <br>
+                                        <div>A saída padrão do container pode ser monitorada na busca por palavras como <b>error</b> ou
+                                            <b>panic</b> para indicar errors no código, e quando isto acontecer, a saída padrão será
+                                            gravada na forma de um arquivo texto no computador hospedeiro e o teste terá falhado.</div>
+                                        <br>
+                                        <div>Escreva os termos separados por ponto e virgula.</div>
+                                        <br>
+                                        <input class="uk-input" name="stdOutputError" type="text" placeholder="error;warning;bug;panic">
                                     </div>
                                     <br>
                                     <br>
@@ -157,11 +179,11 @@
                                         <br>
                                         <div>A saída padrão do container pode ser monitorada na busca por palavras como <b>error</b> ou
                                             <b>panic</b> para indicar errors no código, e quando isto acontecer, a saída padrão será
-                                            gravada na forma de um arquivo texto no computador hospedeiro.</div>
+                                            gravada na forma de um arquivo texto no computador hospedeiro, mas, o teste continuará.</div>
                                         <br>
                                         <div>Escreva os termos separados por ponto e virgula.</div>
                                         <br>
-                                        <input class="uk-input" name="stdOutput" type="text" placeholder="error;warning;bug;panic">
+                                        <input class="uk-input" name="stdOutputLog" type="text" placeholder="error;warning;bug;panic">
                                     </div>
                                     <br>
                                     <br>
@@ -172,32 +194,42 @@
                                             estado atual do container e salva em arquivo para análise posterior.</div>
                                         <br>
                                         <div>Digite o nome do arquivo.</div>
-                                        <input class="uk-input" name="csvFile" type="text" placeholder="stats.csv">
+                                        <input class="uk-input" name="csvFile" type="text" placeholder="natsStats.csv">
                                     </div>
                                     <br>
                                     <br>
+                                    <div>
+                                        <div><b>Existe um texto indicador de fim de instalação?</b></div>
+                                        <br>
+                                        <div>Por exemplo, quando o nats termina a instalação do container ele imprime na saida padrão, o
+                                            texto 'Listening for route connections on 0.0.0.0:6222'.</div>
+                                        <br>
+                                        <div>Digite o texto esperado.</div>
+                                        <input class="uk-input" name="endText" type="text" onkeypress="test()" placeholder="Listening for route connections on 0.0.0.0:6222">
+                                    </div>
                                     <br>
                                     <br>
+                                    <div>
+                                        <div><b>Esse texto tem um timeout?</b></div>
+                                        <br>
+                                        <div>Tempo máximo de espera em segundos.</div>
+                                        <input class="uk-input" name="timeoutText" type="number" value="0">
+                                    </div>
                                     <br>
                                     <br>
+                                    <div>
+                                        <div><b>Devo esperar um tempo depois da instalação do container, antes de continuar?</b></div>
+                                        <br>
+                                        <div>Tempo máximo de espera em segundos.</div>
+                                        <input class="uk-input" name="waitTime" type="number" value="0">
+                                    </div>
                                     <br>
                                     <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
+                                    <p class="uk-text-right">
+                                        <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+                                        <button class="uk-button uk-button-primary" type="button">Salvar</button>
+                                    </p>
                                 </form>
-
-                                <p class="uk-text-right">
-                                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-                                    <button class="uk-button uk-button-primary" type="button">Save</button>
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -247,10 +279,14 @@
         function addGit() {
 
         }
+
+        function test(e, t) {
+            console.log(e, t)
+        }
     </script>
 </html>
 <!-- -->
-<!-- -->
+<!-- https://getuikit.com/docs/form -->
 <!-- -->
 <!-- -->
 <!-- -->
